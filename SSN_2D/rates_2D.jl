@@ -92,7 +92,7 @@ function steady_rates(N, rcpt_types, t, fs, c, J0, i2e)
 
     #Euler Algorithm for dvdt
     for cc = 1:cons
-        I_total = I_spont + I_mod + cc.*g
+        I_total = I_spont + I_mod + c[cc].*g
 
         dvdt(vv) = inv.(tauSvec)*dt .* (-vv + kk*Wtot*kron(ones(rcpt_types), rect_powerLaw(vv))+ I_total)
         vt = zeros(Nt, N*rcpt_types)
@@ -103,7 +103,7 @@ function steady_rates(N, rcpt_types, t, fs, c, J0, i2e)
             v1 = dv + v1
             vv_t[tt, :, cc] = v1
 
-            r_t[tt, :, cc] = rect_powerLaw(v1)
+            r_t[tt, :, cc] = kk*rect_powerLaw(v1)
         end
 
     end
