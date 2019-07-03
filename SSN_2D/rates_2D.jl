@@ -1,7 +1,7 @@
-
+export steady_rates, gammaLinApprox
 
 #this function uses an Euler Method to find the firing rates
-function steady_rates(N, rcpt_types, t, fs, c, J0, i2e)
+function steady_rates(N, rcpt_types, t, c, J0, i2e)
 
     Nthetas = round(Int32, N/2)
 
