@@ -79,6 +79,7 @@ function gammaLinApprox(N, rcpt_types, fs, r_t, c, J0, i2e)
             JacobLambs, Jacobvec = eigen(Jacob) #eigenvalues and vectors of Jacob
 
             JacobLambsHz = 1000*JacobLambs/(2*pi)
+            println(JacobLambsHz)
 
             eE = kron(ones(rcpt_types), eE)
             eI = kron(ones(rcpt_types), eI)
@@ -86,18 +87,17 @@ function gammaLinApprox(N, rcpt_types, fs, r_t, c, J0, i2e)
 
             for ff in fs
                 ind += 1
-                println(ff)
 
                 Gf = -1im*2*pi*ff*Diagonal(kron(tauS, ones(N)))- J
                 #Green's function
 
                 vecE = Gf\eE
                 vecE = (1-NoiseNMDAratio)*vecE[1:N]+ NoiseNMDAratio*vecE[N+1:2*N]
-                SpectorE[ind] = vecE'*(NoiseCov.*vecE) * 2 * NoiseTau/abs(-1im *2 * pi*ff * NoiseTau  + 1)^2
+                SpectorE[ind] = (vecE'*(NoiseCov.*vecE))# * 2 * NoiseTau/abs(-1im *2 * pi*ff * NoiseTau  + 1)^2
             end
         end
 
-        SpectE[:, cc] = SpectorE
+        SpectE[:, cc] = SpectorE*2/1000
 
 
     end
