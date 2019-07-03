@@ -1,4 +1,5 @@
-export steady_rates, gammaLinApprox
+using LinearAlgebra
+using Statistics
 
 #this function uses an Euler Method to find the firing rates
 function steady_rates(N, rcpt_types, t, c, J0, i2e)
@@ -76,9 +77,7 @@ function steady_rates(N, rcpt_types, t, c, J0, i2e)
     dt = mean(diff(t))
     dt2 = sqrt(dt)
 
-    #frequency
-    fs = fs/1000 #convert from Hz to kHz
-
+    
     #Results variables
     v = zeros(N * rcpt_types, cons); #membrane potential
     r_starcons = zeros(N, cons);
