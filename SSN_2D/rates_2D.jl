@@ -77,7 +77,6 @@ function steady_rates(N, rcpt_types, t, c, J0, i2e)
     dt = mean(diff(t))
     dt2 = sqrt(dt)
 
-    
     #Results variables
     v = zeros(N * rcpt_types, cons); #membrane potential
     r_starcons = zeros(N, cons);
@@ -88,6 +87,7 @@ function steady_rates(N, rcpt_types, t, c, J0, i2e)
     tt_c = zeros(Nt, cons); #save out the time each simulation run
 
     rect_powerLaw(vv) = max([sum(vv[1:2:end]), sum(vv[2:2:end])], zeros(2)).^nn
+    Conv = true #whether dvdt vanishes as t-> Nt
 
     #Euler Algorithm for dvdt
     for cc = 1:cons
@@ -103,9 +103,18 @@ function steady_rates(N, rcpt_types, t, c, J0, i2e)
             vv_t[tt, :, cc] = v1
 
             r_t[tt, :, cc] = kk*rect_powerLaw(v1)
+
+            if tt >= Nt - 1000
+                itr = maximum(abs.(dv))
+
+                if itr > 0.01
+                    Conv = false
+                end
+            end
+
         end
 
     end
 
-    return  r_t, vv_t
+    return  r_t, vv_t, Conv
 end
