@@ -5,7 +5,7 @@ function gammaLinApprox(N, rcpt_types, fs, r_t, c, J0, i2e)
     W = J0
 
     #systematic paramters
-    kk = 0.4
+    kk = 0.04
     nn = 2
     cons = length(c)
 
@@ -93,7 +93,7 @@ function gammaLinApprox(N, rcpt_types, fs, r_t, c, J0, i2e)
 
                 vecE = Gf\eE
                 vecE = (1-NoiseNMDAratio)*vecE[1:N]+ NoiseNMDAratio*vecE[N+1:2*N]
-                SpectorE[ind] = (vecE'*(NoiseCov.*vecE))# * 2 * NoiseTau/abs(-1im *2 * pi*ff * NoiseTau  + 1)^2
+                SpectorE[ind] = (vecE'*(NoiseCov.*vecE)) * 2 * NoiseTau/abs(-1im *2 * pi * ff * NoiseTau  + 1)^2
             end
         end
 
