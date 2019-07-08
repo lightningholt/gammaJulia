@@ -5,22 +5,23 @@ include("linearApprox.jl")
 
 #function to find the loss, or mean square error between the expect/ideal Power Spectra
 #and the actual linear approximated power spectra.
-function PS_Loss(Jee, Jei, Jie, Jii, i2e, idealSpect)
+# function PS_Loss(Jee, Jei, Jie, Jii, i2e, idealSpect)
+function PS_Loss(J0, i2e, idealSpect)
     N = 2 #number of neurons
     rcpt_types = 3
     t = 0:0.1:5000
     fs = 0:1:100
     c = [0 25 50 100]
 
-    if Jei > 0
+    if J0[3] > 0
         error("Jei should be negative")
     end
 
-    if Jii > 0
+    if J0[4] > 0
         error("Jii should be negative")
     end
 
-    J0 = [Jee Jei; Jie Jii]
+    # J0 = [Jee Jei; Jie Jii]
 
     rt, vvt, Conv = steady_rates(N, rcpt_types, t, c, J0, i2e)
 
