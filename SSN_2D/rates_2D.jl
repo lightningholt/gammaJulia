@@ -16,11 +16,14 @@ function steady_rates(N, rcpt_types, t, c, J0, i2e)
 
     #define the inputs
     if rcpt_types > 1
-        g = [ones(N); zeros(N*2)] # Dimensions are [AMPA E I, NMDA E I, GABA E I]
-        g[2:2:end] = i2e*g[2:2:end]
+        # g = [ones(N); zeros(N*2)] # Dimensions are [AMPA E I, NMDA E I, GABA E I]
+
+        g = [1; i2e; zeros(N*2)] # Dimensions are [AMPA E I, NMDA E I, GABA E I]
+        # g[2:2:end] = i2e .* g[2:2:end]
+        # g[2] = i2e .* g[2]
     else
         g = ones(N, rcpt_types) # dimensions are E,I
-        g[2,:] = i2e*g[2,:]
+        g[2,:] = i2e .* g[2,:]
     end
 
     I_spont = zeros(N*rcpt_types)
@@ -49,15 +52,20 @@ function steady_rates(N, rcpt_types, t, c, J0, i2e)
         #define receptor W
 
         ### Something weird is happening here. Gotta look into this more
-        Wrcpt = zeros(N, N, length(tauS));
-        Wrcpt[:,:, 1] = (1-nmdaRatio)*[W[:,1] zeros(N, Nthetas)];
-        Wrcpt[:,:,3] = [zeros(N,Nthetas)  W[:, 1+Nthetas]];
-        Wrcpt[:,:, 2] = nmdaRatio*[W[:,1] zeros(N, Nthetas)];
+        # Wrcpt = zeros(N, N, length(tauS));
+        # Wrcpt[:,:, 1] = (1-nmdaRatio) .* [W[:,1] zeros(N)];
+        # Wrcpt[:,:,3] = [zeros(N)  W[:, 1+Nthetas]];
+        # Wrcpt[:,:, 2] = nmdaRatio*[W[:,1] zeros(N)];
+
+        # Wtot = zeros(N*rcpt_types, N*rcpt_types);
+        # Wtot[1:N, 1:N] = Wrcpt[:,:,1]
+        # Wtot[N+1:N+N, N+1:N+N] = Wrcpt[:,:,2]
+        # Wtot[2*N+1:3*N, 2*N+1:3*N] = Wrcpt[:,:,3]
 
         Wtot = zeros(N*rcpt_types, N*rcpt_types);
-        Wtot[1:N, 1:N] = Wrcpt[:,:,1]
-        Wtot[N+1:N+N, N+1:N+N] = Wrcpt[:,:,2]
-        Wtot[2*N+1:3*N, 2*N+1:3*N] = Wrcpt[:,:,3]
+        Wtot[1:N, 1:N] = (1-nmdaRatio) .* [W[:,1] zeros(N)];
+        Wtot[N+1:N+N, N+1:N+N] =  nmdaRatio*[W[:,1] zeros(N)];
+        Wtot[2*N+1:3*N, 2*N+1:3*N] = [zeros(N)  W[:, 1+Nthetas]];
 
         #
         # for type = 0:rcpt_types-1
