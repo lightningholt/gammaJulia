@@ -62,10 +62,11 @@ function steady_rates(N, rcpt_types, t, c, J0, i2e)
         # Wtot[N+1:N+N, N+1:N+N] = Wrcpt[:,:,2]
         # Wtot[2*N+1:3*N, 2*N+1:3*N] = Wrcpt[:,:,3]
 
-        Wtot = zeros(N*rcpt_types, N*rcpt_types);
-        Wtot[1:N, 1:N] = (1-nmdaRatio) .* [W[:,1] zeros(N)];
-        Wtot[N+1:N+N, N+1:N+N] =  nmdaRatio*[W[:,1] zeros(N)];
-        Wtot[2*N+1:3*N, 2*N+1:3*N] = [zeros(N)  W[:, 1+Nthetas]];
+        # Wtot = zeros(N*rcpt_types, N*rcpt_types);
+        # Wtot[1:N, 1:N] = (1-nmdaRatio) .* [W[:,1] zeros(N)];
+        # Wtot[N+1:N+N, N+1:N+N] =  nmdaRatio*[W[:,1] zeros(N)];
+        # Wtot[2*N+1:3*N, 2*N+1:3*N] = [zeros(N)  W[:, 1+Nthetas]];
+         Wtot = [(1-nmdaRatio)*W[1,1] 0 0 0 0 0; (1-nmdaRatio)*W[2,1] 0 0 0 0 0; 0 0 nmdaRatio*W[1,1] 0 0 0; 0 0 nmdaRatio*W[2,1] 0 0 0; 0 0 0 0 0 W[1,2]; 0 0 0 0 0 W[2,2]]
 
         #
         # for type = 0:rcpt_types-1
@@ -94,14 +95,14 @@ function steady_rates(N, rcpt_types, t, c, J0, i2e)
     r_t = zeros(Nt, N, cons); #firing rate
     tt_c = zeros(Nt, cons); #save out the time each simulation run
 
-    rect_powerLaw(vv) = max([sum(vv[1:2:end]), sum(vv[2:2:end])], zeros(2)).^nn
+    rect_powerLaw(vv) = kk*max([sum(vv[1:2:end]), sum(vv[2:2:end])], zeros(2)).^nn
     Conv = true #whether dvdt vanishes as t-> Nt
 
     #Euler Algorithm for dvdt
     for cc = 1:cons
         I_total = I_spont + I_mod + c[cc].*g
 
-        dvdt(vv) = inv.(tauSvec)*dt .* (-vv + kk*Wtot*kron(ones(rcpt_types), rect_powerLaw(vv))+ I_total)
+        dvdt(vv) = inv.(tauSvec)*dt .* (-vv + Wtot*kron(ones(rcpt_types), rect_powerLaw(vv))+ I_total)
         vt = zeros(Nt, N*rcpt_types)
         v1 = zeros(N*rcpt_types)
 
@@ -110,7 +111,7 @@ function steady_rates(N, rcpt_types, t, c, J0, i2e)
             v1 = dv + v1
             vv_t[tt, :, cc] = v1
 
-            r_t[tt, :, cc] = kk*rect_powerLaw(v1)
+            r_t[tt, :, cc] = rect_powerLaw(v1)
 
             if tt >= Nt - 1000
                 itr = maximum(abs.(dv))
