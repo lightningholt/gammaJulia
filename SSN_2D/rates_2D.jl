@@ -248,7 +248,7 @@ function steady_Tracker_v(N, rcpt_types, t, c, J0, i2e)
     rect_powerLaw(vv) = kk*rect_sumv(vv).^nn
     Conv = true #whether dvdt vanishes as t-> Nt
 
-    vt = zeros(Nt, N*rcpt_types, cons)
+    # vt = zeros(Nt, N*rcpt_types, cons)
 
     #Euler Algorithm for dvdt
 
@@ -261,7 +261,7 @@ function steady_Tracker_v(N, rcpt_types, t, c, J0, i2e)
             v1 = dv + v1
             # vv_t[tt, :, cc] = v1
 
-            vt[tt, :,:] = v1
+            # vt[tt, :,:] = v1
 
             # r_t[tt, :, cc] = rect_powerLaw(v1)
 
@@ -276,5 +276,5 @@ function steady_Tracker_v(N, rcpt_types, t, c, J0, i2e)
         end
 
 
-    return  v1, vt, Conv
+    return  v1, Conv
 end
