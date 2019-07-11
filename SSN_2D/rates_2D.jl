@@ -169,8 +169,6 @@ function steady_Tracker_v(N, rcpt_types, t, c, J0, i2e)
         I_total = kron(g, c') + I_mod + I_spont
     end
 
-    println(I_total)
-
     #time constants
     tauE = 15
     tau_ratio = 1
