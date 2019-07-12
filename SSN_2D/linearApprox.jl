@@ -203,13 +203,16 @@ function gammaTrackedLinApprox(N, rcpt_types, fs, vv, c, J0, i2e)
 
             # Jacob = Diagonal(kron(inv.(tauS), ones(N)))*Jcon.data
             # JacobLambs, Jacobvec = eigen(Jacob) #eigenvalues and vectors of Jacob
-            # 
+            #
             # JacobLambsHz = 1000*JacobLambs/(2*pi)
             # println(JacobLambsHz)
 
             eE = kron(ones(rcpt_types), eE)
             eI = kron(ones(rcpt_types), eI)
             ind = 0
+
+            Gf = -1im * 2 * pi * kron(fs, Diagonal(kron(tauS, ones(N)))) - kron(ones(length(fs)), Jcon)
+            reGF = permutedims(reshape(transpose(Gf), N*rcpt_type, N*rcpt_type, length(fs)), [2,1,3])
 
             for ff in fs
                 ind += 1
