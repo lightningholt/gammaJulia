@@ -7,8 +7,14 @@ include("PS_Loss.jl")
 # Jie = param(2.7)
 # Jii = param(-1.5)
 
-J0 = param([0.5 -0.5; 2.7 -1.5])
-i2e = param(0.8)
+# J0 = [0.5 -0.5; 2.7 -1.5]
+# i2e = 0.8
+
+J0 = [1.7 -1.525; 1.7 -0.5] + 0*randn(2,2)
+i2e = 0.6 + 0*randn()
+
+J0 = param(J0)
+i2e = param(i2e)
 
 #define idealSpect
 idealSp = [0.0040    0.1023    0.0697    0.0483

@@ -23,9 +23,11 @@ function PS_Loss(J0, i2e, idealSpect)
 
     # J0 = [Jee Jei; Jie Jii]
 
-    rt, vvt, Conv = steady_rates(N, rcpt_types, t, c, J0, i2e)
+    v_final, Conv = steady_Tracker_v(N, rcpt_types, t, c, J0, i2e)
 
-    SpectE = gammaLinApprox(N, rcpt_types, fs, rt, c, J0, i2e)
+    # println(v_final)
+
+    SpectE = gammaTrackedLinApprox(N, rcpt_types, fs, v_final, c, J0, i2e)
 
     SpectE = SpectE./mean(SpectE)
 
