@@ -25,7 +25,7 @@ N = 2
 Nthetas = round(Int32, N/2)
 rcpt_types = 3
 t = 0:0.1:5000
-f = 0:1:100
+fs = 0:1:100
 
 c = [0 25 50 100]
 
@@ -33,6 +33,7 @@ Jee = param(1.7)
 Jei = param(1.525) #param(-0.5)
 Jie = param(1.7) #param(2.7)
 Jii = param(0.5) #param(-1.5)
+i2e = param(0.6)
 
 J0 = [Jee -Jei; Jie -Jii]
 
