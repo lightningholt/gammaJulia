@@ -1,5 +1,7 @@
-using Flux, CuArrays
+using Flux, CuArrays, LinearAlgebra
 include("rates_2D.jl")
+
+Base.inv(A::CuArray) = CuArrays.CUBLAS.matinv_batched([A])[2][1]
 
 
 function invToSpect(Gf, cuE, fscons, NoiseCov, NoiseNMDAratio, NoiseTau)
@@ -59,8 +61,10 @@ nmdaRatio = 0.1
 NoiseNMDAratio = 0
 NoiseTau = 1*t_scale
 NoiseCov = [1; 1]
+
 tauS = [tauAMPA, tauNMDA, tauGABA]
 tauSvec = kron(tauS, ones(1,N)); #vector time-scales
+
 Wtot = [(1-nmdaRatio)*Jee 0 0 0 0 0;
 (1-nmdaRatio)*Jie 0 0 0 0 0;
 0 0 nmdaRatio*Jee 0 0 0;
