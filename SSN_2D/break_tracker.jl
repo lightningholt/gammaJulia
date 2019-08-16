@@ -18,6 +18,8 @@ function invToSpect(Gf, cuE, fscons, NoiseCov, NoiseNMDAratio, NoiseTau)
     end
 
     return mapreduce(kernel, vcat, CuArray(axes(Gf, 1)); init=CuArray{Float32, 1}())
+end
+
 
 N = 2
 Nthetas = round(Int32, N/2)
